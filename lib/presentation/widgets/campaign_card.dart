@@ -1,68 +1,108 @@
 import 'package:ad_campaign_performance_dashboard/domain/entities/campaign_entity.dart';
 import 'package:flutter/material.dart';
 
-
-
 import 'status_badge.dart';
 
 class CampaignCard extends StatelessWidget {
   final CampaignEntity campaign;
 
-  const CampaignCard({
-    super.key,
-    required this.campaign,
-  });
+  const CampaignCard({super.key, required this.campaign});
 
   @override
   Widget build(BuildContext context) {
-
-    final progress =
-        campaign.spend / campaign.budget;
+    final progress = campaign.spend / campaign.budget;
 
     return Container(
-      padding: const EdgeInsets.all(18),
+      padding: const EdgeInsets.all(16),
 
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: const Color(0xff1A1C29),
 
-        borderRadius:
-        BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(18),
 
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.04),
-            blurRadius: 10,
-            offset: const Offset(0, 5),
-          ),
-        ],
+        border: Border.all(color: Colors.white.withOpacity(0.04)),
       ),
 
       child: Column(
-        crossAxisAlignment:
-        CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
 
         children: [
-
-          /// TOP ROW
+          /// TOP SECTION
           Row(
-            mainAxisAlignment:
-            MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
 
             children: [
+              /// ICON
+              Container(
+                width: 52,
+                height: 52,
 
+                decoration: BoxDecoration(
+                  color: const Color(0xff123645),
+
+                  borderRadius: BorderRadius.circular(10),
+                ),
+
+                child: const Icon(Icons.campaign, color: Color(0xff35D6FF)),
+              ),
+
+              const SizedBox(width: 12),
+
+              /// TITLE
               Expanded(
-                child: Text(
-                  campaign.name,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
 
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  children: [
+                    Text(
+                      campaign.name,
+
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                        height: 1.2,
+                      ),
+                    ),
+
+                    const SizedBox(height: 4),
+
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 3,
+                      ),
+
+                      decoration: BoxDecoration(
+                        color: const Color(0xff123645),
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+
+                      child: Text(
+                        campaign.objective,
+
+                        style: const TextStyle(
+                          color: Color(0xff35D6FF),
+                          fontSize: 11,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
 
-              StatusBadge(
-                status: campaign.status,
+              const SizedBox(width: 10),
+
+              /// STATUS
+              Column(
+                children: [
+                  StatusBadge(status: campaign.status),
+
+                  const SizedBox(height: 8),
+
+                  const Icon(Icons.more_horiz, color: Colors.white54),
+                ],
               ),
             ],
           ),
@@ -70,68 +110,159 @@ class CampaignCard extends StatelessWidget {
           const SizedBox(height: 20),
 
           /// SPEND
+          const Text(
+            'Total spend',
+
+            style: TextStyle(color: Colors.white54, fontSize: 13),
+          ),
+
+          const SizedBox(height: 4),
+
           Row(
-            mainAxisAlignment:
-            MainAxisAlignment.spaceBetween,
-
             children: [
+              Text(
+                '${campaign.spend.toStringAsFixed(0)} ${campaign.currency.toString()}',
 
-              const Text(
-                'Spend',
-                style: TextStyle(
-                  fontWeight: FontWeight.w500,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 22,
                 ),
               ),
 
               Text(
-                '\$${campaign.spend.toStringAsFixed(0)} / \$${campaign.budget.toStringAsFixed(0)}',
+                ' / ${campaign.budget.toStringAsFixed(0)} ${campaign.currency.toString()}',
+
+                style: const TextStyle(color: Colors.white54, fontSize: 15),
               ),
             ],
           ),
 
-          const SizedBox(height: 10),
+          const SizedBox(height: 14),
 
-          /// PROGRESS BAR
-          ClipRRect(
-            borderRadius:
-            BorderRadius.circular(10),
+          /// PROGRESS
+          Row(
+            children: [
+              Expanded(
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
 
-            child: LinearProgressIndicator(
-              value: progress > 1 ? 1 : progress,
-              minHeight: 10,
+                  child: LinearProgressIndicator(
+                    value: progress > 1 ? 1 : progress,
 
-              backgroundColor:
-              Colors.grey.shade200,
+                    minHeight: 8,
 
-              color: const Color(0xff5B67F1),
-            ),
+                    backgroundColor: Colors.white12,
+
+                    color: const Color(0xff35D6FF),
+                  ),
+                ),
+              ),
+
+              const SizedBox(width: 10),
+
+              Text(
+                '${campaign.budgetUtilization.toStringAsFixed(0)}%',
+
+                style: const TextStyle(color: Colors.white54, fontSize: 13),
+              ),
+            ],
           ),
 
-          const SizedBox(height: 20),
+          const SizedBox(height: 22),
 
           /// METRICS
           Row(
-            mainAxisAlignment:
-            MainAxisAlignment.spaceBetween,
-
             children: [
-
-              _metricItem(
-                title: 'Impressions',
-                value:
-                campaign.impressions.toString(),
+              Expanded(
+                child: _metricCard(
+                  icon: Icons.remove_red_eye_outlined,
+                  value: '${(campaign.impressions / 1000).toStringAsFixed(0)}K',
+                  title: 'Impressions',
+                ),
               ),
 
-              _metricItem(
-                title: 'Clicks',
-                value:
-                campaign.clicks.toString(),
+              const SizedBox(width: 12),
+
+              Expanded(
+                child: _metricCard(
+                  icon: Icons.ads_click_outlined,
+                  value: '${(campaign.clicks / 1000).toStringAsFixed(1)}K',
+                  title: 'Clicks',
+                ),
               ),
 
-              _metricItem(
-                title: 'CTR',
-                value:
-                '${campaign.ctr.toStringAsFixed(2)}%',
+              const SizedBox(width: 12),
+
+              Expanded(
+                child: _metricCard(
+                  icon: Icons.trending_up,
+                  value: '${campaign.ctr.toStringAsFixed(2)}%',
+                  title: 'CTR',
+                ),
+              ),
+            ],
+          ),
+
+          const SizedBox(height: 18),
+
+          /// FOOTER
+          Row(
+            children: [
+              const Icon(
+                Icons.calendar_month,
+                color: Color(0xff35D6FF),
+                size: 18,
+              ),
+
+              const SizedBox(width: 6),
+
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+
+                children: [
+                  const Text(
+                    'Start date',
+
+                    style: TextStyle(color: Colors.white54, fontSize: 12),
+                  ),
+
+                  Text(
+                    campaign.startDate,
+
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+              ),
+
+              const Spacer(),
+
+              const Icon(Icons.gps_fixed, color: Color(0xff35D6FF), size: 18),
+
+              const SizedBox(width: 6),
+
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+
+                children: [
+                  const Text(
+                    'Audience',
+
+                    style: TextStyle(color: Colors.white54, fontSize: 12),
+                  ),
+
+                  Text(
+                    campaign.channel,
+
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
@@ -140,30 +271,45 @@ class CampaignCard extends StatelessWidget {
     );
   }
 
-  Widget _metricItem({
-    required String title,
+  Widget _metricCard({
+    required IconData icon,
     required String value,
+    required String title,
   }) {
-    return Column(
-      children: [
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 14),
 
-        Text(
-          value,
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(14),
+
+        border: Border.all(color: Colors.white10),
+      ),
+
+      child: Column(
+        children: [
+          Icon(icon, color: const Color(0xff35D6FF), size: 18),
+
+          const SizedBox(height: 8),
+
+          Text(
+            value,
+
+            style: const TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontSize: 18,
+            ),
           ),
-        ),
 
-        const SizedBox(height: 6),
+          const SizedBox(height: 4),
 
-        Text(
-          title,
-          style: TextStyle(
-            color: Colors.grey.shade600,
+          Text(
+            title,
+
+            style: const TextStyle(color: Colors.white54, fontSize: 12),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

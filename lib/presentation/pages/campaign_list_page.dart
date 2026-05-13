@@ -5,6 +5,7 @@ import 'package:ad_campaign_performance_dashboard/injection_container.dart';
 import 'package:ad_campaign_performance_dashboard/presentation/widgets/campaign_card.dart';
 import 'package:ad_campaign_performance_dashboard/presentation/widgets/campaign_filter_bar.dart';
 import 'package:ad_campaign_performance_dashboard/presentation/widgets/campaign_shimmer.dart';
+import 'package:ad_campaign_performance_dashboard/presentation/widgets/search_bar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -43,17 +44,30 @@ class _CampaignListViewState
   Widget build(BuildContext context) {
 
     return Scaffold(
-      backgroundColor: const Color(0xffF5F7FB),
+
+      backgroundColor: const Color(0xff0F111A),
 
       appBar: AppBar(
+
+        backgroundColor: const Color(0xff0F111A),
+
         elevation: 0,
-        backgroundColor: Colors.white,
 
         title: const Text(
-          'Campaign Dashboard',
+          'Campaign List',
+
           style: TextStyle(
-            color: Colors.black,
+            color: Colors.white,
             fontWeight: FontWeight.bold,
+          ),
+        ),
+
+        leading: IconButton(
+          onPressed: () {},
+
+          icon: const Icon(
+            Icons.menu,
+            color: Colors.white,
           ),
         ),
       ),
@@ -61,7 +75,10 @@ class _CampaignListViewState
       body: Column(
         children: [
 
-          /// FILTER BAR
+          /// SEARCH BAR
+          const SearchBarWidget(),
+
+          /// FILTERS
           CampaignFilterBar(
             selectedFilter: selectedFilter,
 
@@ -71,7 +88,8 @@ class _CampaignListViewState
                 selectedFilter = value;
               });
 
-              final bloc = context.read<CampaignBloc>();
+              final bloc =
+              context.read<CampaignBloc>();
 
               if (bloc.allCampaigns.isNotEmpty) {
 
@@ -89,30 +107,25 @@ class _CampaignListViewState
                 CampaignState>(
               builder: (context, state) {
 
-                /// LOADING
                 if (state is CampaignLoading) {
                   return const CampaignShimmer();
                 }
 
-                /// ERROR
                 if (state is CampaignError) {
                   return Center(
-                    child: Text(state.message),
+                    child: Text(
+                      state.message,
+                      style: const TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
                   );
                 }
 
-                /// LOADED
                 if (state is CampaignLoaded) {
 
-                  if (state.campaigns.isEmpty) {
-                    return const Center(
-                      child: Text(
-                        'No Campaigns Found',
-                      ),
-                    );
-                  }
-
                   return RefreshIndicator(
+
                     onRefresh: () async {
 
                       context
@@ -123,6 +136,7 @@ class _CampaignListViewState
                     },
 
                     child: ListView.builder(
+
                       padding:
                       const EdgeInsets.all(16),
 
@@ -135,6 +149,7 @@ class _CampaignListViewState
                         state.campaigns[index];
 
                         return Padding(
+
                           padding:
                           const EdgeInsets.only(
                             bottom: 16,

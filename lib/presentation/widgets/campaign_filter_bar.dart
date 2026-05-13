@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class CampaignFilterBar extends StatelessWidget {
+
   final String selectedFilter;
 
   final Function(String) onSelected;
@@ -20,23 +21,35 @@ class CampaignFilterBar extends StatelessWidget {
       'Paused',
     ];
 
-    return Container(
-      height: 70,
-      padding: const EdgeInsets.symmetric(
-        horizontal: 16,
-      ),
+    return SizedBox(
 
-      child: Row(
-        children: filters.map((filter) {
+      height: 50,
+
+      child: ListView.builder(
+
+        scrollDirection: Axis.horizontal,
+
+        padding:
+        const EdgeInsets.symmetric(
+          horizontal: 16,
+        ),
+
+        itemCount: filters.length,
+
+        itemBuilder: (context, index) {
+
+          final filter = filters[index];
 
           final isSelected =
               selectedFilter == filter;
 
           return Padding(
+
             padding:
-            const EdgeInsets.only(right: 12),
+            const EdgeInsets.only(right: 10),
 
             child: ChoiceChip(
+
               label: Text(filter),
 
               selected: isSelected,
@@ -44,17 +57,21 @@ class CampaignFilterBar extends StatelessWidget {
               onSelected: (_) =>
                   onSelected(filter),
 
+              backgroundColor:
+              const Color(0xff1A1C29),
+
               selectedColor:
-              const Color(0xff5B67F1),
+              const Color(0xff35D6FF),
 
               labelStyle: TextStyle(
+
                 color: isSelected
-                    ? Colors.white
-                    : Colors.black,
+                    ? Colors.black
+                    : Colors.white,
               ),
             ),
           );
-        }).toList(),
+        },
       ),
     );
   }
