@@ -2,13 +2,14 @@ import 'package:ad_campaign_performance_dashboard/bloc/campaign_detail/campaign_
 import 'package:ad_campaign_performance_dashboard/bloc/campaign_detail/campaign_detail_event.dart';
 import 'package:ad_campaign_performance_dashboard/bloc/campaign_detail/campaign_detail_state.dart';
 import 'package:ad_campaign_performance_dashboard/domain/entities/campaign_entity.dart';
+import 'package:ad_campaign_performance_dashboard/injection_container.dart';
 
 import 'package:fl_chart/fl_chart.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../injection_container.dart';
+
 
 class CampaignDetailPage extends StatelessWidget {
   final CampaignEntity campaign;
@@ -191,7 +192,7 @@ class CampaignDetailPage extends StatelessWidget {
 
                     const SizedBox(height: 20),
 
-                    /// KPI CARDS
+                    /// CARDS
                     Row(
                       children: [
 
@@ -329,7 +330,7 @@ class CampaignDetailPage extends StatelessWidget {
 
                           const SizedBox(height: 16),
 
-                          /// LEGENDS
+
                           Row(
                             children: [
 
@@ -609,7 +610,7 @@ class CampaignDetailPage extends StatelessWidget {
                     const SizedBox(height: 18),
 
                     /// RECOMMENDATION CARD
-                    /// RECOMMENDATION CARD
+
                     Container(
 
                       padding: const EdgeInsets.all(16),

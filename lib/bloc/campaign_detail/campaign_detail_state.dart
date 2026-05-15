@@ -1,6 +1,7 @@
-import '../../../data/models/history_model.dart';
 
-import '../../../domain/entities/forecast_entity.dart';
+
+import 'package:ad_campaign_performance_dashboard/data/models/history_model.dart';
+import 'package:ad_campaign_performance_dashboard/domain/entities/forecast_entity.dart';
 
 abstract class CampaignDetailState {}
 

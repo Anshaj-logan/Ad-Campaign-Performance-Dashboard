@@ -1,8 +1,8 @@
+import 'package:ad_campaign_performance_dashboard/data/datasource/campaign_detail_remote_datasource.dart';
+import 'package:ad_campaign_performance_dashboard/data/services/local_forecast_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../data/datasource/campaign_detail_remote_datasource.dart';
 
-import '../../../data/services/local_forecast_service.dart';
 
 import 'campaign_detail_event.dart';
 import 'campaign_detail_state.dart';

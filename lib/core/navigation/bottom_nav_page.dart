@@ -1,4 +1,5 @@
 import 'package:ad_campaign_performance_dashboard/presentation/pages/campaign_list_page.dart';
+import 'package:ad_campaign_performance_dashboard/presentation/pages/spend_summary_page.dart';
 import 'package:flutter/material.dart';
 
 class BottomNavPage extends StatefulWidget {
@@ -13,7 +14,7 @@ class _BottomNavPageState extends State<BottomNavPage> {
 
   final pages = [
     const CampaignListPage(),
-    const Center(child: Text('Spend Summary')),
+    const SpendSummaryPage(),
     const Center(child: Text('Alerts')),
     const Center(child: Text('Profile')),
   ];

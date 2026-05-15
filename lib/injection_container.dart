@@ -1,10 +1,12 @@
 import 'package:ad_campaign_performance_dashboard/bloc/campaign_detail/campaign_detail_bloc.dart';
+import 'package:ad_campaign_performance_dashboard/data/datasource/summary_remote_datasource.dart';
 import 'package:ad_campaign_performance_dashboard/data/services/local_forecast_service.dart';
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 
 
 import 'bloc/campaign/campaign_bloc.dart';
+import 'bloc/summary/summary_bloc.dart';
 import 'core/network/dio_client.dart';
 import 'data/datasource/campaign_detail_remote_datasource.dart';
 import 'data/datasource/campaign_remote_datasource.dart';
@@ -61,5 +63,18 @@ Future<void> init() async {
 
   sl.registerLazySingleton(
         () => LocalForecastService(),
+  );
+
+  /// SUMMARY DATASOURCE
+  sl.registerLazySingleton<
+      SummaryRemoteDataSource>(
+        () => SummaryRemoteDataSourceImpl(
+      sl(),
+    ),
+  );
+
+  /// SUMMARY BLOC
+  sl.registerFactory(
+        () => SummaryBloc(sl()),
   );
 }

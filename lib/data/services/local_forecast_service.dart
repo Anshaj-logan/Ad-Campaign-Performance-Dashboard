@@ -1,4 +1,6 @@
-import '../../domain/entities/forecast_entity.dart';
+
+
+import 'package:ad_campaign_performance_dashboard/domain/entities/forecast_entity.dart';
 
 class LocalForecastService {
 
