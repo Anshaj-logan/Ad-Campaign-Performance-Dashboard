@@ -1,9 +1,11 @@
+import 'package:ad_campaign_performance_dashboard/bloc/alert/alert_bloc.dart';
 import 'package:ad_campaign_performance_dashboard/bloc/campaign_detail/campaign_detail_bloc.dart';
+import 'package:ad_campaign_performance_dashboard/data/datasource/alert_remote_datasource.dart';
 import 'package:ad_campaign_performance_dashboard/data/datasource/summary_remote_datasource.dart';
 import 'package:ad_campaign_performance_dashboard/data/services/local_forecast_service.dart';
+import 'package:ad_campaign_performance_dashboard/data/services/notification_service.dart';
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
-
 
 import 'bloc/campaign/campaign_bloc.dart';
 import 'bloc/summary/summary_bloc.dart';
@@ -14,67 +16,56 @@ import 'data/repositories/campaign_repository_impl.dart';
 import 'domain/repositories/campaign_repository.dart';
 import 'domain/usecases/get_campaigns_usecase.dart';
 
-
 final sl = GetIt.instance;
 
 Future<void> init() async {
-
   // Bloc
-  sl.registerFactory(
-        () => CampaignBloc(sl()),
-  );
+  sl.registerFactory(() => CampaignBloc(sl()));
 
   // UseCase
-  sl.registerLazySingleton(
-        () => GetCampaignsUseCase(sl()),
-  );
+  sl.registerLazySingleton(() => GetCampaignsUseCase(sl()));
 
   // Repository
   sl.registerLazySingleton<CampaignRepository>(
-        () => CampaignRepositoryImpl(sl()),
+    () => CampaignRepositoryImpl(sl()),
   );
 
   // DataSource
   sl.registerLazySingleton<CampaignRemoteDataSource>(
-        () => CampaignRemoteDataSourceImpl(sl()),
+    () => CampaignRemoteDataSourceImpl(sl()),
   );
 
   // Dio
-  sl.registerLazySingleton<Dio>(
-        () => DioClient().dio,
-  );
+  sl.registerLazySingleton<Dio>(() => DioClient().dio);
 
   /// DETAIL BLOC
-  sl.registerFactory(
-        () => CampaignDetailBloc(
-      sl(),
-      sl(),
-    ),
-  );
+  sl.registerFactory(() => CampaignDetailBloc(sl(), sl()));
 
   /// DETAIL DATASOURCE
-  sl.registerLazySingleton<
-      CampaignDetailRemoteDataSource>(
-        () =>
-        CampaignDetailRemoteDataSourceImpl(
-          sl(),
-        ),
+  sl.registerLazySingleton<CampaignDetailRemoteDataSource>(
+    () => CampaignDetailRemoteDataSourceImpl(sl()),
   );
 
-  sl.registerLazySingleton(
-        () => LocalForecastService(),
-  );
+  sl.registerLazySingleton(() => LocalForecastService());
 
   /// SUMMARY DATASOURCE
-  sl.registerLazySingleton<
-      SummaryRemoteDataSource>(
-        () => SummaryRemoteDataSourceImpl(
-      sl(),
-    ),
+  sl.registerLazySingleton<SummaryRemoteDataSource>(
+    () => SummaryRemoteDataSourceImpl(sl()),
   );
 
   /// SUMMARY BLOC
-  sl.registerFactory(
-        () => SummaryBloc(sl()),
+  sl.registerFactory(() => SummaryBloc(sl()));
+
+  /// ALERT REMOTE DATASOURCE
+  sl.registerLazySingleton<AlertRemoteDataSource>(
+    () => AlertRemoteDataSourceImpl(sl()),
   );
+
+  /// ALERT BLOC
+  sl.registerFactory(() => AlertBloc(sl(), sl()));
+
+  /// NOTIFICATION SERVICE
+  sl.registerLazySingleton(() => NotificationService());
+
+  await sl<NotificationService>().init();
 }

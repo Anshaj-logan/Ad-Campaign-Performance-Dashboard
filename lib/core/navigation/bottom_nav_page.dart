@@ -1,3 +1,4 @@
+import 'package:ad_campaign_performance_dashboard/presentation/pages/anomaly_alert_page.dart';
 import 'package:ad_campaign_performance_dashboard/presentation/pages/campaign_list_page.dart';
 import 'package:ad_campaign_performance_dashboard/presentation/pages/spend_summary_page.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +16,7 @@ class _BottomNavPageState extends State<BottomNavPage> {
   final pages = [
     const CampaignListPage(),
     const SpendSummaryPage(),
-    const Center(child: Text('Alerts')),
+    const AnomalyAlertPage(),
     const Center(child: Text('Profile')),
   ];
 
